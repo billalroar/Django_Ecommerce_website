@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}  
+
+{% load cart %}
+        
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  ...
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- Modalend -->
+        
+        <!-- Checkout Start -->
+        <div class="checkout">
+            <div class="container-fluid"> 
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="checkout-inner">
+                            <div class="billing-address">
+                                <form id="form">
+                                    {% csrf_token %}
+                                <h2>Shipping Address</h2>
+                                <div class="row">
+                                    {% for a in user_details %}
+                                    <div class="col-md-6">
+                                        <label>First Name</label>
+                                        <input class="form-control" type="text" id="first_name" name="first_name" placeholder="First Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Last Name"</label>
+                                        <input class="form-control" type="text" id="last_name" placeholder="Last Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>E-mail</label>
+                                        <input class="form-control" type="text" id="email" name="email" placeholder="E-mail">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Mobile No</label>
+                                        <input class="form-control" type="text" id="phone" placeholder="Mobile No">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Address</label>
+                                        <input class="form-control" type="text" id="address" placeholder="Address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Country</label>
+                                        <select class="custom-select" id="country">
+                                            <option selected>Bangladesh</option>
+                                            <option>Afghanistan</option>
+                                            <option>India</option>
+                                            <option>Pakistan</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>City</label>
+                                        <input class="form-control" type="text" id="city" placeholder="City">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>State</label>
+                                        <input class="form-control" type="text" id="state" placeholder="State">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>ZIP Code</label>
+                                        <input class="form-control" type="text" id="zip_code" placeholder="ZIP Code">
+                                    </div>
+                                    <input class="form-control" type="hidden" id="for" value="{{for}}">
+                                    {% endfor %}
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="checkout-inner">
+                            {% if products %}
+                            <div class="checkout-summary">
+                                <h1>Cart Total</h1>
+                                <p class="sub-total">Sub Total<span>TK {{products|total_cart_price:request.session.cart}}</span></p>
+                                <p class="ship-cost">Shipping Cost<span>TK 60</span></p>
+                                <h2>Grand Total<span>TK&nbsp;<span id="grand_total">{{products|full_total:request.session.cart}}</span>  </span></h2>
+                            </div>
+                            {% endif %}
+                            {% if product %}
+                            <div class="checkout-summary">
+                                {% for p in product%}
+                                <h1>Cart Total</h1>
+                                <p class="sub-total">Sub Total<span>TK {{p.price}}</span></p>
+                                <p class="sub-total">Quantity<span>{{quantity}}</span></p>
+                                <p class="ship-cost">Shipping Cost<span>TK 60</span></p>
+                                <h2>Grand Total<span>TK&nbsp;<span id="grand_total">{{p.price|single_full_total:quantity}}</span>  </span></h2>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+
+                            <div class="checkout-payment">
+                                <div class="payment-methods">
+                                    <h1>Payment Methods</h1>
+                                    <div class="payment-method">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" id="payment-1" name="payment" value="paypal">
+                                            <label class="custom-control-label" for="payment-1">Paypal</label>
+                                        </div>
+                                        <div class="payment-content" id="payment-1-show">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt orci ac eros volutpat maximus lacinia quis diam.
+                                                
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="payment-method">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" class="custom-control-input" id="payment-5" name="payment" value="cash">
+                                            <label class="custom-control-label" for="payment-5">Cash on Delivery</label>
+                                        </div>
+                                        <div class="payment-content" id="payment-5-show">
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tincidunt orci ac eros volutpat maximus lacinia quis diam.
+                                                
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="checkout-btn">
+                                    <button onclick="com()">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Checkout End -->
+
+        
+
+        <div class="modal fade" id="billal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal billal</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div id="paypal-button-container"></div>
+                    <script src="https://www.paypal.com/sdk/js?client-id=AanhLQ_L71LUkdgADMTIbC3hzASAEQx8mw0B24m8N3o28FIlgCbnWTVbAz9sNdG5e5Ef3kkk8TJiXmii&currency=USD&disable-funding=credit"></script>
+                    <script>
+                        
+                        var total =  document.getElementById('grand_total').innerHTML;
+                            // Render the PayPal button into #paypal-button-container
+                            paypal.Buttons({
+                                // Set up the transaction
+                                createOrder: function(data, actions) {
+                                    return actions.order.create({
+                                        purchase_units: [{
+                                            amount: {
+                                                value: parseFloat(total).toFixed(2)
+                                            }
+                                        }]
+                                    });
+                                },
+                    
+                                // Finalize the transaction
+                                onApprove: function(data, actions) {
+                                    return actions.order.capture().then(function(details) {
+                                        // Show a success message to the buyer
+                                        checkout()
+                                    });
+                                }
+                    
+                    
+                            }).render('#paypal-button-container');
+                    </script>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+
+
+
+
+
+
+
+
+
+
+        <script type="text/javascript">
+            var form = document.getElementById('from')
+            var total = document.getElementById('grand_total').innerHTML;
+
+            function checkout(){
+                var radio = document.getElementsByName('payment')
+                var payment1=''
+                var quantity = '{{quantity}}'
+                if (radio[0].checked==true){
+                    var payment1='paypel'
+                }
+                else if(radio[1].checked==true){
+                    var payment1='Cash on delivery'
+                }
+                $.ajax({
+                    url:'checkout',
+                    type: "POST",
+                    data:{
+                        first_name:$('#first_name').val(),
+                        last_name:$('#last_name').val(),
+                        email:$('#email').val(),
+			            phone:$('#phone').val(),
+                        address:$('#address').val(),
+                        city:$('#city').val(),
+                        zip_code:$('#zip_code').val(),
+                        for:$('#for').val(),
+                        total:$('#grand_total').text(),
+                        country:$('#country').val(),
+                        payment:payment1,
+                        state:$('#state').val(),
+                        quantity:quantity,
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }
+                }).done(function (data) {
+                    if (data.success){
+                        window.location.href = data.url;
+                    }
+                    else{
+                        alert("Woring : "+data.error_massage);
+                    }
+                });
+            }
+
+            function com(){
+                var radio = document.getElementsByName('payment')
+                if (radio[0].checked==true){
+                    $('#billal').modal('show');
+                }
+                else if(radio[1].checked==true){
+                    
+                    checkout();
+                }
+                else{
+                    alert("Please select payment method")
+                }
+                    
+            }
+            
+            
+        </script>
+        
+        {% endblock %}

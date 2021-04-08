@@ -1,0 +1,101 @@
+      
+        {% extends 'base.html' %}
+
+        {% block content %}
+
+        {% load static %}
+        
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Products</a></li>
+                    <li class="breadcrumb-item active">Login & Register</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+        
+        <!-- Login Start -->
+        <div class="login">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">  
+                        <form action="/signup" method="POST">
+                            {% csrf_token %}
+                            {% if error %}
+                            <div class="alert alert-denger" role="alert">
+                                {{error}}
+                            </div>
+                            {% endif %}
+                        <div class="register-form">
+                            <div class="row">
+                                <div class="from-group col-md-6">
+                                    <label>First Name</label>
+                                    <input class="form-control" type="text" name="firstname" id="" value="{{values.first_name}}" placeholder="First Name">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>Last Name"</label>
+                                    <input class="form-control" type="text" name="lastname" id="" value="{{values.last_name}}"  placeholder="Last Name">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>E-mail</label>
+                                    <input class="form-control" type="text" name="email" id="" value="{{values.email}}"  placeholder="E-mail">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>Mobile No</label>
+                                    <input class="form-control" type="text" name="phone" id="" value="{{values.phone}}"  placeholder="Mobile No">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>Password</label>
+                                    <input class="form-control" type="text" name="password1" id=""  placeholder="Password">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>Retype Password</label>
+                                    <input class="form-control" type="text" name="password2" id=""  placeholder="Password">
+                                </div>
+                                <div class="from-group col-md-12">
+                                    <button class="btn">Submit</button>
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <input class="form-control" type="hidden" name="action" value="register">
+                                </div>
+                            </div>
+                        </div>
+                    </form>  
+                    </div>
+                    <div class="col-lg-6">
+                        <form action="/signup" method="POST">
+                            {% csrf_token %}
+                            {% if error1 %}
+                            <div class="alert alert-denger" role="alert">
+                                {{error1}}
+                            </div>
+                            {% endif %}
+                        <div class="login-form">
+                            <div class="row">
+                                <div class="from-group col-md-6">
+                                    <label>E-mail</label>
+                                    <input class="form-control" type="text" name="email" id="" placeholder="E-mail">
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <label>Password</label>
+                                    <input class="form-control" type="text" name="password" id=""  placeholder="Password">
+                                </div>
+                                <div class="from-group col-md-12">
+                                    <button class="btn">Submit</button>
+                                </div>
+                                <div class="from-group col-md-6">
+                                    <input class="form-control" type="hidden" name="action" value="login">
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Login End -->
+        
+        {% endblock %}
